@@ -1,4 +1,4 @@
-package android.cvnhan.androidcloud;
+package com.cvnhandroid.android_cloud;
 
 import org.junit.Test;
 

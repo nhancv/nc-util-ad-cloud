@@ -1,9 +1,8 @@
-package android.cvnhan.androidcloud;
+package com.cvnhandroid.android_cloud;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,10 +12,17 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();
+    @Bind(R.id.tvInfo)
     TextView tvInfo;
+    @Bind(R.id.etInfo)
     EditText etInfo;
+    @Bind(R.id.btnChange)
     Button btnChange;
     Firebase myFirebaseRef;
 
@@ -27,16 +33,7 @@ public class MainActivity extends Activity {
         Firebase.setAndroidContext(this);
         myFirebaseRef = new Firebase("https://crackling-inferno-3353.firebaseio.com/");
         setContentView(R.layout.activity_main);
-        tvInfo = (TextView) findViewById(R.id.tvInfo);
-        etInfo = (EditText) findViewById(R.id.etInfo);
-        btnChange = (Button) findViewById(R.id.btnChange);
-        btnChange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "onClick: " + etInfo.getText().toString());
-                myFirebaseRef.child("message").setValue(etInfo.getText().toString());
-            }
-        });
+        ButterKnife.bind(this);
 
         myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
             @Override
@@ -52,6 +49,10 @@ public class MainActivity extends Activity {
             }
         });
     }
-
+    @OnClick(R.id.btnChange)
+    public void btnChangeOnclick(){
+        Log.e(TAG, "onClick: " + etInfo.getText().toString());
+        myFirebaseRef.child("message").setValue(etInfo.getText().toString());
+    }
 
 }
