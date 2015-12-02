@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -35,12 +36,31 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
+//        myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                Log.e(TAG, "onDataChange: " + snapshot.getValue());
+//                if (snapshot.getValue() != null) {
+//                    tvInfo.setText(snapshot.getValue().toString());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError error) {
+//            }
+//        });
+
+//        E5:4C:5F:6B:58:92 xanh
+//        EF:66:66:04:11:7B tim1
+        final String beaconXanh = "E5:4C:5F:6B:58:92";
+        myFirebaseRef.child(beaconXanh).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.e(TAG, "onDataChange: " + snapshot.getValue());
-                if (snapshot.getValue() != null) {
+                Log.e(TAG, "beacon xanh: " + snapshot.getValue());
+                if (snapshot.getValue() != null && snapshot.getValue().toString().equals("solved")==false) {
                     tvInfo.setText(snapshot.getValue().toString());
+                    Toast.makeText(MainActivity.this, "Device " + snapshot.getValue().toString() + " has been detected", Toast.LENGTH_SHORT).show();
+                    myFirebaseRef.child(beaconXanh).setValue("solved");
                 }
             }
 
@@ -52,7 +72,7 @@ public class MainActivity extends Activity {
     @OnClick(R.id.btnChange)
     public void btnChangeOnclick(){
         Log.e(TAG, "onClick: " + etInfo.getText().toString());
-        myFirebaseRef.child("message").setValue(etInfo.getText().toString());
+//        myFirebaseRef.child("message").setValue(etInfo.getText().toString());
     }
 
 }
